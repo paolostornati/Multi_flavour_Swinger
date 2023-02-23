@@ -394,20 +394,22 @@ def main(N,L,g,m_1,m_2,pen,bc,Nst):
     mass_term_1 = []
     mass_term_2 = []
     
+    #gauss law measurement
+    g_term = []
 
-        
     for i in range(N):
         
         electric_field.append(np.real(np.conj(psi_ground)@LGT_object.electric_field_matrix(i)@psi_ground))
         mass_term_1.append(np.real(np.conj(psi_ground)@LGT_object.fermion_number_matrix(i,0)@psi_ground))
         mass_term_2.append(np.real(np.conj(psi_ground)@LGT_object.fermion_number_matrix(i,1)@psi_ground))
-                
+        g_term.append(np.real(np.conj(psi_ground)@(LGT_object.Gauss_law_ar[i]*(LGT_object.Gauss_law_ar[i]-sparse.identity(LGT_object.basis.Ns)))**2@psi_ground))
+ 
         
         
     f = open("twflph_N_"+str(N)+"_m1_"+str(m_1)+"_m2_"+str(m_2)+"_g_"+str(g)+"_bc_"+str(bc)+".txt", "w")
     
     for l in range(N):
-        f.write(str(l)+" "+str(electric_field[l])+" "+str(mass_term_1[l])+" "+str(mass_term_2[l])+"\n")
+        f.write(str(l)+" "+str(electric_field[l])+" "+str(mass_term_1[l])+" "+str(mass_term_2[l])+" "+str(round(g_term,6))"\n")
         
     f.close()
 
